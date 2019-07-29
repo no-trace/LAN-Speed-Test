@@ -1,6 +1,7 @@
-﻿Write-Host "
+Write-Host "
+LAN Speed Test for Powershell
 Created July 2019 by T.K. Garrett
-"
+" -ForegroundColor Yellow
 
 # Functions
 function How-To {
@@ -8,6 +9,7 @@ function How-To {
     Usage:
         .\Test-Speed.ps1 <filesize in MB> <local path> <remote path>
         All 3 arguments are required
+        File size is limited to 2 GB (2000 MB)
 
     Examples:
         .\Test-Speed.ps1 500 C: Z:\FolderName
@@ -46,7 +48,7 @@ $serverTestPath = $args[2]
 $testFileName = "test.file"
 
 # Create test file with random data
-Success-Box; Write-Host "Creating test file.............................................: ${localTestPath}\${testFileName}"
+Success-Box; Write-Host "Creating test file.........................................: ${localTestPath}\${testFileName}"
 
 If (-Not (Test-Path $localTestPath)) {
     New-Item -ItemType directory -Path $localTestPath >null
@@ -59,7 +61,7 @@ If (-Not (Test-Path "${localTestPath}\${testFileName}")) {
     }
 
 # Upload test - Copy test file from local machine to server and print transfer rate
-Success-Box; Write-Host "Copying test file to remote location...........................: ${localTestPath}\${testFileName} to ${serverTestPath}\${testFileName}"
+Success-Box; Write-Host "Copying test file to remote location.......................: ${localTestPath}\${testFileName} to ${serverTestPath}\${testFileName}"
 $uploadStartTime = Get-Date
 Copy-Item "${localTestPath}\${testFileName}" -Destination "${serverTestPath}\${testFileName}"
 $uploadEndTime = Get-Date
@@ -68,11 +70,11 @@ $megabits = $testFileSizeMB * 8
 $uploadTransferRate = [int]($megabits / $uploadCopyTime)
 
 # Remove local test file before performing download test
-Success-Box; Write-Host "Deleting local test file before performing download test.......: ${localTestPath}\${testFileName}"
+Success-Box; Write-Host "Deleting local test file before performing download test...: ${localTestPath}\${testFileName}"
 Remove-Item "${localTestPath}\${testFileName}"
 
 # Download test - Copy test file from server to local machine and print transfer rate
-Success-Box; Write-Host "Downloading test file from remote location.....................: ${serverTestPath}\${testFileName} to ${localTestPath}\${testFileName}"
+Success-Box; Write-Host "Downloading test file from remote location.................: ${serverTestPath}\${testFileName} to ${localTestPath}\${testFileName}"
 $downloadStartTime = Get-Date
 Copy-Item "${serverTestPath}\${testFileName}" -Destination "${localTestPath}\${testFileName}"
 $downloadEndTime = Get-Date
